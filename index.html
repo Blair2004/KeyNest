@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#121a2b">
+  <title>Keynest Authenticator</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="qr.css">
+</head>
+<body>
+  <svg class="icon-sprite" aria-hidden="true">
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V21h-4v-.08A1.7 1.7 0 0 0 8.96 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.52-1H3v-4h.08A1.7 1.7 0 0 0 4.6 8.96a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 8.96 4.6 1.7 1.7 0 0 0 10 3.08V3h4v.08a1.7 1.7 0 0 0 1.04 1.52 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06a1.7 1.7 0 0 0-.34 1.88A1.7 1.7 0 0 0 20.92 10H21v4h-.08A1.7 1.7 0 0 0 19.4 15Z"/></symbol>
+    <symbol id="i-import" viewBox="0 0 24 24"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 19h14"/></symbol>
+    <symbol id="i-export" viewBox="0 0 24 24"><path d="M12 15V3m0 0 4 4m-4-4L8 7M5 19h14"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3m3 0-1 14H7L6 7m4 4v6m4-6v6"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.6 2.9 8.4 7 10 4.1-1.6 7-5.4 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.5"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="i-archive" viewBox="0 0 24 24"><path d="M4 7h16v13H4zM3 3h18v4H3zM9 11h6"/></symbol>
+    <symbol id="i-grip" viewBox="0 0 24 24"><circle cx="8" cy="6" r="1"/><circle cx="16" cy="6" r="1"/><circle cx="8" cy="12" r="1"/><circle cx="16" cy="12" r="1"/><circle cx="8" cy="18" r="1"/><circle cx="16" cy="18" r="1"/></symbol>
+    <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3c.5 4.8 3.2 7.5 8 8-4.8.5-7.5 3.2-8 8-.5-4.8-3.2-7.5-8-8 4.8-.5 7.5-3.2 8-8Z"/><path d="M19 3v4M21 5h-4"/></symbol>
+  </svg>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="Keynest home">
+        <span class="brand-mark"><span></span><span></span><span></span></span>
+        <span>Keynest</span>
+      </a>
+
+      <nav class="nav" aria-label="Main navigation">
+        <p class="nav-label">Workspace</p>
+        <button class="nav-item active" data-action="show-active" data-view="accounts">
+          <svg><use href="#i-grid"/></svg><span>Accounts</span><span class="nav-count" id="accountCount">0</span>
+        </button>
+        <button class="nav-item" data-action="show-archived"><svg><use href="#i-archive"/></svg><span>Archive</span><span class="nav-count" id="archiveCount">0</span></button>
+        <button class="nav-item" data-action="show-generator" data-view="generator"><svg><use href="#i-sparkle"/></svg><span>Name generator</span></button>
+        <button class="nav-item" data-action="open-import"><svg><use href="#i-import"/></svg><span>Import</span></button>
+        <button class="nav-item" data-action="open-export"><svg><use href="#i-export"/></svg><span>Export</span></button>
+        <p class="nav-label space-above">Preferences</p>
+        <button class="nav-item" data-action="open-settings"><svg><use href="#i-settings"/></svg><span>Custom fields</span></button>
+      </nav>
+
+      <div class="sidebar-note">
+        <span class="note-icon"><svg><use href="#i-lock"/></svg></span>
+        <div><strong>Stored on this device</strong><p>Your vault never leaves this browser unless you export it.</p></div>
+      </div>
+      <div class="profile-row">
+        <div class="avatar">B</div>
+        <div><strong>Personal vault</strong><span>Local storage</span></div>
+        <button class="icon-button" data-action="open-settings" aria-label="Open settings"><svg><use href="#i-settings"/></svg></button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar" id="accountTopbar">
+        <div class="search-wrap">
+          <svg><use href="#i-search"/></svg>
+          <input id="searchInput" type="search" placeholder="Search accounts, emails or identifiers..." autocomplete="off" aria-controls="searchSuggestions" aria-expanded="false">
+          <kbd>⌘ K</kbd>
+          <div id="searchSuggestions" class="search-suggestions" hidden>
+            <div class="suggestion-heading"><span id="suggestionTitle">Frequently used</span><small>Top 5</small></div>
+            <div id="suggestionList" class="suggestion-list"></div>
+            <p class="suggestion-footnote">Recommendations improve as you copy account codes.</p>
+          </div>
+        </div>
+        <button class="secondary-button compact" data-action="open-import"><svg><use href="#i-import"/></svg>Import</button>
+        <button class="primary-button" data-action="open-account"><svg><use href="#i-plus"/></svg>Add account</button>
+      </header>
+
+      <section class="content" id="accountsView">
+        <div class="page-heading">
+          <div>
+            <p class="eyebrow">Authenticator</p>
+            <h1 id="pageTitle">Your accounts</h1>
+            <p id="pageSubtitle">Secure codes and the details you need, all in one place.</p>
+          </div>
+          <div class="sync-status"><span></span> Codes refresh in <strong id="globalTimer">30s</strong></div>
+        </div>
+
+        <div class="filter-row">
+          <div class="filter-tabs" role="tablist">
+            <button class="filter-tab active" data-filter="all">All <span id="allCount">0</span></button>
+            <button class="filter-tab" data-filter="work">Work <span id="workCount">0</span></button>
+            <button class="filter-tab" data-filter="personal">Personal <span id="personalCount">0</span></button>
+          </div>
+          <div class="list-controls">
+            <label class="sort-control">Show
+              <select id="statusSelect"><option value="active">All active</option><option value="todo">To do</option><option value="done">Completed</option><option value="archived">Archived</option></select>
+            </label>
+            <label class="sort-control">Sort by
+              <select id="sortSelect"><option value="manual">Manual order</option><option value="recent">Recently added</option><option value="name">Name</option><option value="issuer">Issuer</option></select>
+            </label>
+          </div>
+        </div>
+
+        <div id="accountGrid" class="account-grid" aria-live="polite"></div>
+
+        <div id="emptyState" class="empty-state" hidden>
+          <div class="empty-illustration"><svg><use href="#i-shield"/></svg></div>
+          <h2>Your vault is ready</h2>
+          <p>Add an authenticator account or import an existing backup to get started.</p>
+          <div><button class="primary-button" data-action="open-account"><svg><use href="#i-plus"/></svg>Add first account</button><button class="secondary-button" data-action="open-import">Import backup</button></div>
+        </div>
+      </section>
+
+      <section class="content name-generator-view" id="nameGeneratorView" hidden>
+        <div class="generator-heading">
+          <div>
+            <p class="eyebrow">Cameroon names</p>
+            <h1>Name generator</h1>
+            <p>Mix locally inspired given names and surnames from Cameroon’s ten regions.</p>
+          </div>
+          <div class="generator-stat"><strong>3</strong><span>first-name styles</span></div>
+        </div>
+
+        <div class="generator-layout">
+          <div class="generator-panel">
+            <div class="generator-controls">
+              <label>Region<span>Choose one region or all of Cameroon</span><select id="nameRegion"><option value="all">All regions</option></select></label>
+              <label>First-name style<span>English/Christian, Islamic, or Bantu/local</span><select id="givenNameStyle"><option value="mixed">Mixed Cameroon</option><option value="english">English / Christian</option><option value="islamic">Islamic</option><option value="local">Bantu / local</option></select></label>
+              <label>First names<span>Generate one or two personal names</span><select id="givenNameCount"><option value="random">Random: 1 or 2</option><option value="1">1 first name</option><option value="2">2 first names</option></select></label>
+              <label>Family names<span>Generate one or two regional family names</span><select id="surnameCount"><option value="random">Random: 1 or 2</option><option value="1">1 family name</option><option value="2">2 family names</option></select></label>
+              <div class="generator-actions">
+                <button class="primary-button" type="button" id="generateName"><svg><use href="#i-sparkle"/></svg>Generate name</button>
+                <button class="secondary-button" type="button" id="shuffleAllNames"><svg><use href="#i-grid"/></svg>Shuffle all</button>
+              </div>
+            </div>
+
+            <article class="generated-name-card" aria-live="polite">
+              <div class="cameroon-colours" aria-hidden="true"><span></span><span></span><span></span></div>
+              <span class="generated-region" id="generatedRegion">Cameroon</span>
+              <h2 id="generatedName">Ready to generate</h2>
+              <p id="generatedContext">Select a region or generate from all ten regions.</p>
+              <div class="generated-parts">
+                <button class="generated-part" type="button" id="copyGeneratedGiven" disabled><span>First name(s)</span><strong id="generatedGiven">—</strong><svg><use href="#i-copy"/></svg></button>
+                <button class="generated-part" type="button" id="copyGeneratedSurname" disabled><span>Family name(s)</span><strong id="generatedSurname">—</strong><svg><use href="#i-copy"/></svg></button>
+              </div>
+              <button class="copy-name-button" type="button" id="copyGeneratedName" disabled><svg><use href="#i-copy"/></svg>Copy full name</button>
+            </article>
+          </div>
+
+          <aside class="generator-about">
+            <span class="generator-about-icon"><svg><use href="#i-sparkle"/></svg></span>
+            <h2>Built for quick ideas</h2>
+            <p>Combine familiar English/Christian or Islamic first names with regional family names—or use a Bantu/local personal name.</p>
+            <div class="generator-metric"><strong>10</strong><span>regions</span></div>
+            <div class="generator-metric"><strong>3</strong><span>first-name styles</span></div>
+          </aside>
+        </div>
+
+        <div class="shuffle-section">
+          <div class="shuffle-heading"><div><p class="eyebrow">Regional shuffle</p><h2>One from every region</h2></div><p>Use Shuffle all to refresh the complete set.</p></div>
+          <div class="region-name-grid" id="regionNameGrid"></div>
+        </div>
+        <p class="culture-note">Regional labels are an inspiration guide, not a rule about identity. Cameroon’s communities and naming traditions cross administrative borders.</p>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" hidden></div>
+
+  <dialog id="accountDialog" class="dialog account-dialog">
+    <form id="accountForm" method="dialog">
+      <div class="dialog-head">
+        <div><p class="eyebrow" id="accountDialogEyebrow">New account</p><h2 id="accountDialogTitle">Add authenticator</h2><p>Enter the secret from the service you want to protect.</p></div>
+        <button class="icon-button close-dialog" type="button" aria-label="Close"><svg><use href="#i-close"/></svg></button>
+      </div>
+      <div class="dialog-body">
+        <input type="hidden" id="accountId">
+        <div class="form-grid two-col">
+          <label>Issuer<span>Service or company name</span><input id="issuerInput" required placeholder="e.g. Figma"></label>
+          <label>Account name<span>Usually your email or username</span><input id="nameInput" required placeholder="name@example.com"></label>
+        </div>
+        <label>Secret key<span>Spaces are ignored; Base32 format</span><div class="secret-input"><input id="secretInput" required placeholder="JBSW Y3DP EHPK 3PXP" autocomplete="off"><button type="button" class="icon-button" id="toggleSecret" aria-label="Show secret"><svg><use href="#i-eye"/></svg></button></div></label>
+        <div class="form-grid two-col compact-fields">
+          <label>Category<select id="categoryInput"><option value="work">Work</option><option value="personal">Personal</option></select></label>
+          <label>Digits<select id="digitsInput"><option value="6">6 digits</option><option value="8">8 digits</option></select></label>
+        </div>
+        <div class="custom-values-head"><div><h3>Custom values</h3><p>Fields are managed in settings.</p></div><button type="button" class="text-button" data-action="open-settings">Manage fields <svg><use href="#i-chevron"/></svg></button></div>
+        <div id="customValueInputs" class="custom-inputs"></div>
+      </div>
+      <div class="dialog-actions"><button class="secondary-button close-dialog" type="button">Cancel</button><button class="primary-button" type="submit" id="saveAccountButton">Save account</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="settingsDialog" class="dialog settings-dialog">
+    <form id="settingsForm" method="dialog">
+      <div class="dialog-head">
+        <div><p class="eyebrow">Vault settings</p><h2>Custom fields</h2><p>Define extra values available on every account.</p></div>
+        <button class="icon-button close-dialog" type="button" aria-label="Close"><svg><use href="#i-close"/></svg></button>
+      </div>
+      <div class="dialog-body">
+        <div class="info-banner"><span><svg><use href="#i-copy"/></svg></span><p><strong>Made for quick access.</strong> Each saved value gets its own copy button on the account card.</p></div>
+        <div id="fieldDefinitionList" class="field-definition-list"></div>
+        <button type="button" class="add-field-button" id="addFieldButton"><svg><use href="#i-plus"/></svg>Add another field</button>
+      </div>
+      <div class="dialog-actions"><button class="secondary-button close-dialog" type="button">Cancel</button><button class="primary-button" type="submit">Save fields</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="importDialog" class="dialog import-dialog">
+    <form id="importForm" method="dialog">
+      <div class="dialog-head">
+        <div><p class="eyebrow">Bring your accounts</p><h2>Import accounts</h2><p>Import a Keynest backup, OTP links, or Google Authenticator migration data.</p></div>
+        <button class="icon-button close-dialog" type="button" aria-label="Close"><svg><use href="#i-close"/></svg></button>
+      </div>
+      <div class="dialog-body">
+        <label class="drop-zone" id="dropZone">
+          <input type="file" id="importFile" accept=".json,.txt,.png,.jpg,.jpeg,.webp,application/json,text/plain,image/png,image/jpeg,image/webp">
+          <span class="upload-icon"><svg><use href="#i-import"/></svg></span>
+          <strong id="dropZoneTitle">Choose a file or QR image</strong>
+          <span id="dropZoneHint">Keynest JSON, OTP links, or a PNG, JPG, or WebP QR code</span>
+          <span class="clipboard-hint"><kbd>Ctrl + V</kbd> Paste a QR image from your clipboard</span>
+          <span id="qrImageResult" class="qr-image-result" hidden><img id="qrImagePreview" alt=""><span><strong>QR code detected</strong><small id="qrImageName"></small></span><em>Ready</em></span>
+        </label>
+        <div class="divider"><span>or paste manually</span></div>
+        <label>Import data<textarea id="importText" rows="7" placeholder="Paste backup JSON, otpauth:// links, or an otpauth-migration:// link"></textarea></label>
+        <div class="dedupe-note"><svg><use href="#i-shield"/></svg><p><strong>Duplicates are handled automatically.</strong> Matching accounts are skipped, while missing custom values are safely merged.</p></div>
+      </div>
+      <div class="dialog-actions"><button class="secondary-button close-dialog" type="button">Cancel</button><button class="primary-button" type="submit">Review & import</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="exportDialog" class="dialog export-dialog">
+    <form method="dialog">
+      <div class="dialog-head">
+        <div><p class="eyebrow">Portable backup</p><h2>Export accounts</h2><p>Choose the format that fits where you're going.</p></div>
+        <button class="icon-button close-dialog" type="button" aria-label="Close"><svg><use href="#i-close"/></svg></button>
+      </div>
+      <div class="dialog-body export-options">
+        <button type="button" class="export-option" data-export="json"><span class="export-icon json">{ }</span><span><strong>Keynest backup</strong><small>JSON · Includes custom fields and settings</small></span><svg><use href="#i-chevron"/></svg></button>
+        <button type="button" class="export-option" data-export="otpauth"><span class="export-icon uri">//</span><span><strong>Standard OTP links</strong><small>TXT · Compatible with other authenticators</small></span><svg><use href="#i-chevron"/></svg></button>
+        <div class="warning-note"><svg><use href="#i-lock"/></svg><p>Exports contain your secret keys. Store them somewhere private and delete them when no longer needed.</p></div>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toastRegion" class="toast-region" aria-live="polite"></div>
+
+  <template id="accountCardTemplate">
+    <article class="account-card">
+      <div class="card-top">
+        <div class="service-logo"></div>
+        <div class="service-meta"><h2></h2><p></p></div>
+        <div class="card-controls">
+          <button class="done-toggle" aria-label="Mark work done" aria-pressed="false"><span>✓</span></button>
+          <button class="icon-button drag-handle" aria-label="Drag to reorder" title="Drag to reorder"><svg><use href="#i-grip"/></svg></button>
+          <button class="icon-button more-button" aria-label="Account actions"><svg><use href="#i-more"/></svg></button>
+        </div>
+        <div class="card-menu" hidden><button data-card-action="edit">Edit account</button><button data-card-action="copy-uri">Copy OTP link</button><button data-card-action="archive">Archive account</button><button class="danger" data-card-action="delete">Delete account</button></div>
+      </div>
+      <div class="code-section">
+        <div><span class="code-label">One-time code</span><button class="otp-code" data-copy-kind="code"><span class="code-value"></span><svg><use href="#i-copy"/></svg></button></div>
+        <div class="timer-ring"><svg viewBox="0 0 42 42"><circle class="ring-track" cx="21" cy="21" r="17"/><circle class="ring-progress" cx="21" cy="21" r="17"/></svg><strong>30</strong></div>
+      </div>
+      <div class="custom-values"></div>
+    </article>
+  </template>
+
+  <script src="vendor/jsQR.js"></script>
+  <script src="names.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

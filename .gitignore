@@ -1,0 +1,19 @@
+# Build outputs
+publish/
+desktop/bin/
+desktop/obj/
+KeynestAuthenticator-win-x64/
+*.zip
+
+# Local editor and OS files
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+Thumbs.db
+Desktop.ini
+
+# Local test artifacts
+*.log

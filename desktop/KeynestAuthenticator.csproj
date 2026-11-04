@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>KeynestAuthenticator</AssemblyName>
+    <RootNamespace>KeynestAuthenticator</RootNamespace>
+    <Version>1.0.0</Version>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4258.31" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\index.html" Link="Web\index.html" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\styles.css" Link="Web\styles.css" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\qr.css" Link="Web\qr.css" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\app.js" Link="Web\app.js" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\names.js" Link="Web\names.js" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\vendor\jsQR.js" Link="Web\vendor\jsQR.js" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\vendor\jsQR.LICENSE" Link="Web\vendor\jsQR.LICENSE" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>
